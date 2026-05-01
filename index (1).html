@@ -1,0 +1,366 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard — Mobile Ads Van</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="css/admin.css"/>
+</head>
+<body class="login-page">
+
+  <!-- ================================
+       LOGIN SCREEN
+  ================================ -->
+  <div id="loginScreen" class="login-screen">
+    <div class="login-card">
+      <div class="login-logo">Mobile Ads <span>Van</span></div>
+      <div class="login-subtitle">Admin Dashboard</div>
+      <div class="login-form">
+        <div class="form-group">
+          <label>Username</label>
+          <div class="input-icon">
+            <i class="fas fa-user"></i>
+            <input type="text" id="loginUser" placeholder="Enter username" autocomplete="off"/>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Password</label>
+          <div class="input-icon">
+            <i class="fas fa-lock"></i>
+            <input type="password" id="loginPass" placeholder="Enter password"
+                   onkeydown="if(event.key==='Enter') login()"/>
+            <button class="toggle-pw" onclick="togglePw()" tabindex="-1">
+              <i class="fas fa-eye" id="eyeIcon"></i>
+            </button>
+          </div>
+        </div>
+        <p id="loginError" class="error-msg" style="display:none">
+          <i class="fas fa-exclamation-circle"></i> Invalid username or password
+        </p>
+        <button class="btn-login" onclick="login()" id="loginBtn">
+          <span id="loginBtnText"><i class="fas fa-sign-in-alt"></i> Login</span>
+          <span id="loginBtnLoad" style="display:none"><i class="fas fa-spinner fa-spin"></i> Logging in...</span>
+        </button>
+      </div>
+      <p class="login-footer">Mobile Ads Van © 2025 · Kolkata</p>
+    </div>
+  </div>
+
+  <!-- ================================
+       MAIN DASHBOARD
+  ================================ -->
+  <div id="dashboard" class="dashboard-layout" style="display:none">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-logo">MAV <span>Admin</span></div>
+        <button class="sidebar-close" onclick="toggleSidebar()">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <div class="nav-section-label">Main</div>
+        <a href="#" class="nav-item active" onclick="showSection('overview')">
+          <i class="fas fa-chart-pie"></i> Overview
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('enquiries')">
+          <i class="fas fa-envelope"></i> Enquiries
+          <span class="nav-badge" id="newBadge">0</span>
+        </a>
+        <div class="nav-section-label">Media</div>
+        <a href="#" class="nav-item" onclick="showSection('upload')">
+          <i class="fas fa-cloud-upload-alt"></i> Upload Media
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('gallery')">
+          <i class="fas fa-images"></i> Gallery
+        </a>
+        <div class="nav-section-label">Settings</div>
+        <a href="#" class="nav-item" onclick="showSection('settings')">
+          <i class="fas fa-cog"></i> Site Settings
+        </a>
+        <a href="#" class="nav-item" onclick="showSection('security')">
+          <i class="fas fa-shield-alt"></i> Security
+        </a>
+      </nav>
+
+      <div class="sidebar-footer">
+        <div class="admin-user">
+          <div class="avatar" id="sidebarAvatar">A</div>
+          <div>
+            <div class="admin-name" id="sidebarName">Admin</div>
+            <div class="admin-role">Super Admin</div>
+          </div>
+        </div>
+        <button class="btn-logout" onclick="logout()">
+          <i class="fas fa-sign-out-alt"></i> Logout
+        </button>
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT -->
+    <main class="main-content">
+
+      <!-- TOP BAR -->
+      <header class="topbar">
+        <div class="topbar-left">
+          <button class="hamburger" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+          </button>
+          <h1 class="page-title" id="pageTitle">Overview</h1>
+        </div>
+        <div class="topbar-right">
+          <a href="/" target="_blank" class="btn-view-site">
+            <i class="fas fa-external-link-alt"></i> View Site
+          </a>
+          <div class="admin-chip">
+            <div class="chip-avatar" id="topbarAvatar">A</div>
+            <span id="topbarName">Admin</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- SECTIONS -->
+
+      <!-- OVERVIEW SECTION -->
+      <section id="section-overview" class="section active">
+        <div class="stats-grid">
+          <div class="stat-card yellow">
+            <div class="stat-icon"><i class="fas fa-envelope"></i></div>
+            <div class="stat-info">
+              <div class="stat-num" id="st-total">0</div>
+              <div class="stat-label">Total Enquiries</div>
+            </div>
+          </div>
+          <div class="stat-card red">
+            <div class="stat-icon"><i class="fas fa-bell"></i></div>
+            <div class="stat-info">
+              <div class="stat-num" id="st-new">0</div>
+              <div class="stat-label">New / Unread</div>
+            </div>
+          </div>
+          <div class="stat-card green">
+            <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+            <div class="stat-info">
+              <div class="stat-num" id="st-today">0</div>
+              <div class="stat-label">Today</div>
+            </div>
+          </div>
+          <div class="stat-card blue">
+            <div class="stat-icon"><i class="fas fa-images"></i></div>
+            <div class="stat-info">
+              <div class="stat-num" id="st-media">0</div>
+              <div class="stat-label">Media Files</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <!-- Recent Enquiries -->
+          <div class="card">
+            <div class="card-header">
+              <div class="card-title">Recent Enquiries</div>
+              <button class="btn-sm" onclick="showSection('enquiries')">View All</button>
+            </div>
+            <div id="recentEnquiriesList" class="enquiry-list-mini"></div>
+          </div>
+          <!-- Quick Actions -->
+          <div class="card">
+            <div class="card-header"><div class="card-title">Quick Actions</div></div>
+            <div class="quick-actions">
+              <button class="qa-btn" onclick="showSection('upload')">
+                <i class="fas fa-upload"></i> Upload Media
+              </button>
+              <button class="qa-btn" onclick="showSection('enquiries')">
+                <i class="fas fa-list"></i> View Enquiries
+              </button>
+              <button class="qa-btn" onclick="showSection('settings')">
+                <i class="fas fa-cog"></i> Edit Settings
+              </button>
+              <a href="/" target="_blank" class="qa-btn">
+                <i class="fas fa-eye"></i> View Website
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ENQUIRIES SECTION -->
+      <section id="section-enquiries" class="section">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">All Enquiries</div>
+            <div class="filter-tabs" id="enquiryFilters">
+              <button class="filter-tab active" onclick="filterEnquiries('all',this)">All</button>
+              <button class="filter-tab new" onclick="filterEnquiries('new',this)">New</button>
+              <button class="filter-tab" onclick="filterEnquiries('read',this)">Read</button>
+              <button class="filter-tab" onclick="filterEnquiries('contacted',this)">Contacted</button>
+              <button class="filter-tab" onclick="filterEnquiries('closed',this)">Closed</button>
+            </div>
+          </div>
+          <div id="enquiriesTable" class="enquiry-table-wrap"></div>
+        </div>
+      </section>
+
+      <!-- UPLOAD SECTION -->
+      <section id="section-upload" class="section">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Upload Images & Videos</div></div>
+          <div class="upload-meta">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Caption (optional)</label>
+                <input type="text" id="uploadCaption" placeholder="e.g. Coaching campaign - New Town"/>
+              </div>
+              <div class="form-group">
+                <label>Category</label>
+                <select id="uploadCategory">
+                  <option value="campaign">Campaign</option>
+                  <option value="portfolio">Portfolio</option>
+                  <option value="team">Team</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <div class="upload-zone" id="uploadZone"
+               onclick="document.getElementById('fileInput').click()"
+               ondragover="dragOver(event)" ondragleave="dragLeave(event)"
+               ondrop="dropFiles(event)">
+            <i class="fas fa-cloud-upload-alt"></i>
+            <p><strong>Click to select files</strong> or drag &amp; drop</p>
+            <p class="upload-hint">Images: JPG, PNG, WEBP · Videos: MP4, MOV, AVI · Max 20MB each</p>
+          </div>
+          <input type="file" id="fileInput" multiple
+                 accept="image/jpeg,image/png,image/webp,video/mp4,video/quicktime,video/avi"
+                 onchange="handleUpload(this.files)" style="display:none"/>
+          <div class="upload-progress" id="uploadProgressWrap" style="display:none">
+            <div class="progress-bar" id="uploadProgressBar"></div>
+            <span id="uploadProgressText">Uploading...</span>
+          </div>
+          <div id="uploadFeedback"></div>
+          <div id="uploadPreview" class="upload-preview-grid"></div>
+        </div>
+      </section>
+
+      <!-- GALLERY SECTION -->
+      <section id="section-gallery" class="section">
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title">Media Gallery</div>
+            <div class="filter-tabs">
+              <button class="filter-tab active" onclick="filterMedia('all',this)">All</button>
+              <button class="filter-tab" onclick="filterMedia('image',this)">Images</button>
+              <button class="filter-tab" onclick="filterMedia('video',this)">Videos</button>
+            </div>
+          </div>
+          <div id="galleryGrid" class="gallery-grid-admin"></div>
+        </div>
+      </section>
+
+      <!-- SETTINGS SECTION -->
+      <section id="section-settings" class="section">
+        <div class="card">
+          <div class="card-header"><div class="card-title">Site Settings</div></div>
+          <div class="settings-form" id="settingsForm">
+            <div class="form-row">
+              <div class="form-group">
+                <label>Business Name</label>
+                <input type="text" id="s-business_name"/>
+              </div>
+              <div class="form-group">
+                <label>Tagline</label>
+                <input type="text" id="s-tagline"/>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Phone</label>
+                <input type="text" id="s-phone"/>
+              </div>
+              <div class="form-group">
+                <label>WhatsApp Number (with country code)</label>
+                <input type="text" id="s-whatsapp"/>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="s-email"/>
+              </div>
+              <div class="form-group">
+                <label>Price Per Van/Day (₹)</label>
+                <input type="number" id="s-price_per_van_day"/>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Total Clients</label>
+                <input type="number" id="s-clients"/>
+              </div>
+              <div class="form-group">
+                <label>Areas Covered</label>
+                <input type="number" id="s-areas"/>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label>Facebook URL</label>
+                <input type="text" id="s-facebook_url"/>
+              </div>
+              <div class="form-group">
+                <label>Instagram URL</label>
+                <input type="text" id="s-instagram_url"/>
+              </div>
+            </div>
+            <button class="btn-save" onclick="saveSettings()">
+              <i class="fas fa-save"></i> Save Settings
+            </button>
+            <p id="settingsFeedback" class="success-msg" style="display:none"></p>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECURITY SECTION -->
+      <section id="section-security" class="section">
+        <div class="card" style="max-width:480px">
+          <div class="card-header"><div class="card-title">Change Password</div></div>
+          <div class="form-group">
+            <label>Current Password</label>
+            <input type="password" id="curPw" placeholder="Current password"/>
+          </div>
+          <div class="form-group">
+            <label>New Password</label>
+            <input type="password" id="newPw" placeholder="New password (min 6 chars)"/>
+          </div>
+          <div class="form-group">
+            <label>Confirm New Password</label>
+            <input type="password" id="confPw" placeholder="Confirm new password"/>
+          </div>
+          <p id="pwFeedback" class="error-msg" style="display:none"></p>
+          <button class="btn-save" onclick="changePassword()">
+            <i class="fas fa-key"></i> Change Password
+          </button>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ENQUIRY DETAIL MODAL -->
+  <div class="modal-overlay" id="enquiryModal" style="display:none" onclick="closeModal(event)">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeEnquiryModal()"><i class="fas fa-times"></i></button>
+      <div id="enquiryModalContent"></div>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+
+  <script src="js/admin.js"></script>
+</body>
+</html>
